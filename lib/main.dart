@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
+  const MyHomePage({Key? key,  required this.title}) : super(key: key);
    final String title;
 
   @override
@@ -50,111 +50,40 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-      body:Column(
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child:AspectRatio(
-                    aspectRatio: 1.0,
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Container(
-                          ),
-                        ),
-                        VerticalDivider(width:0.0,color:Colors.black),
-                      ],
-                    )),),
-              Expanded(
-                child:AspectRatio(
-                    aspectRatio: 1.0,
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Container(
-                          ),
-                        ),
-                        VerticalDivider(width:0.0,color:Colors.black),
-                      ],
-                    )),),
-              Expanded(
-                child:AspectRatio(
-                    aspectRatio: 1.0,
-                    child: Container(
-                    )),),        ],
-          ),
-          Divider(height: 0.0,color:Colors.black),
-          Row(
-            children: [
-              Expanded(
-                child:AspectRatio(
-                    aspectRatio: 1.0,
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Container(
-                          ),
-                        ),
-                        VerticalDivider(width:0.0,color:Colors.black),
-                      ],
-                    )),),
-              Expanded(
-                child:AspectRatio(
-                    aspectRatio: 1.0,
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Container(
-                          ),
-                        ),
-                        VerticalDivider(width:0.0,color:Colors.black),
-                      ],
-                    )),),
-              Expanded(
-                child:AspectRatio(
-                    aspectRatio: 1.0,
-                    child: Container(
-                    )),),        ],
-          ),
-          Divider(height: 0.0,color:Colors.black),
-
-          Row(
-            children: [
-              Expanded(
-                child:AspectRatio(
-                    aspectRatio: 1.0,
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Container(
-                          ),
-                        ),
-                        VerticalDivider(width:0.0,color:Colors.black),
-                      ],
-                    )),),
-              Expanded(
-                child:AspectRatio(
-                    aspectRatio: 1.0,
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Container(
-                          ),
-                        ),
-                        VerticalDivider(width:0.0,color:Colors.black),
-                      ],
-                    )),),
-              Expanded(
-                child:AspectRatio(
-                    aspectRatio: 1.0,
-                    child: Container(
-                    )),),        ],
-          ),
-          Divider(height: 0.0,color:Colors.black),
-        ],
-      ),
+      body:buildField(),
 
     );
   }
+
+  Column buildField() {
+    List<Widget> _columnCildren = [];
+    List<Widget> _rowCildren = [];
+
+    for(int h=0; h<3; h++){
+      for(int i = 0; i < 3; i++){
+        _rowCildren.add(
+            Expanded(
+              child:AspectRatio(
+                  aspectRatio: 1.0,
+                  child: i==2 ?Container()
+                      :Row(
+                    children: [
+                      Expanded(
+                        child: Container(
+                        ),
+                      ),
+                      VerticalDivider(width:0.0,color:Colors.black),
+                    ],
+                  )),
+            )
+        );
+      }
+      _columnCildren.add(Row(children: _rowCildren,));
+      _columnCildren.add(Divider(height: 0.0,color:Colors.black));
+      _rowCildren = [];
+    }
+
+    return Column(children: _columnCildren,);
+  }
 }
+
