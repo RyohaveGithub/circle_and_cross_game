@@ -1,6 +1,6 @@
 # circle_and_cross_game
 
-Futterで作成マルバツゲームです。
+Futterで作成したマルバツゲームです。
 
 Udemyの動画を元に完成させました。
 

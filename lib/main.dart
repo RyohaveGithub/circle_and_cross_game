@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import "package:font_awesome_flutter/font_awesome_flutter.dart";
 import 'package:helloworld/model.dart';
@@ -33,6 +35,10 @@ class _MyHomePageState extends State<MyHomePage> {
   bool turnOfCircle = true;
   List<PieceStatus> statusList=List.filled(9,PieceStatus.none);
   GameStatus gameStatus = GameStatus.play;
+  List<Widget> buildLine = [Container()];
+  double lineThickness = 6.0;
+  late double lineWidth ;
+
 
   final List<List<int>> settlementListHorizonal =[
     [0,1,2],
@@ -54,6 +60,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    //buildに入ったタイミング出ないとMediaQueryはとってこれない
+    lineWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         title: Row(
@@ -80,6 +88,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       turnOfCircle = true;
                       statusList = List.filled(9,PieceStatus.none);
                       gameStatus = GameStatus.play;
+                       buildLine = [Container()];
                     });
                   },
                 )
@@ -120,7 +129,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   }
 
-  Column buildField() {
+  Widget buildField() {
     List<Widget> _columnCildren = [Divider(height: 0.0,color: Colors.black,)];
     List<Widget> _rowCildren = [];
 
@@ -161,7 +170,15 @@ class _MyHomePageState extends State<MyHomePage> {
       _rowCildren = [];
     }
 
-    return Column(children: _columnCildren,);
+    return Stack(
+      children: [
+        Column(children: _columnCildren,),
+        Stack(
+          children: buildLine,
+
+        )
+      ],
+    );
   }
 
   Container buildContainer(PieceStatus pierceStatus) {
@@ -191,16 +208,43 @@ class _MyHomePageState extends State<MyHomePage> {
     }
     for(int i =0; i < settlementListHorizonal.length; i++){
       if(statusList[settlementListHorizonal[i][0]]== statusList[settlementListHorizonal[i][1]] && statusList[settlementListHorizonal[i][1]] == statusList[settlementListHorizonal[i][2]]&& statusList[settlementListHorizonal[i][0]]!= PieceStatus.none){
+        buildLine.add(
+          Container(
+            width: lineWidth,
+            height: lineThickness,
+            color: Colors.black.withOpacity(0.3),
+            margin:EdgeInsets.only(top: lineWidth / 3 * i + lineWidth / 6 - lineThickness / 2),
+          )
+        );
         gameStatus = GameStatus.settlement;
       }
     }
     for(int i =0; i < settlementListVertical.length; i++){
       if(statusList[settlementListVertical[i][0]]== statusList[settlementListVertical[i][1]] && statusList[settlementListVertical[i][1]] == statusList[settlementListVertical[i][2]]&& statusList[settlementListVertical[i][0]]!= PieceStatus.none){
+        buildLine.add(
+            Container(
+              width: lineThickness,
+              height: lineWidth,
+              color: Colors.black.withOpacity(0.3),
+              margin:EdgeInsets.only(left: lineWidth / 3 * i + lineWidth / 6 - lineThickness / 2),
+            )
+        );
         gameStatus = GameStatus.settlement;
       }
     }
     for(int i =0; i < settlementListDiagonal.length; i++){
       if(statusList[settlementListDiagonal[i][0]]== statusList[settlementListDiagonal[i][1]] && statusList[settlementListDiagonal[i][1]] == statusList[settlementListDiagonal[i][2]]&& statusList[settlementListDiagonal[i][0]]!= PieceStatus.none){
+        buildLine.add(
+          Transform.rotate(
+              alignment: i == 0 ? Alignment.topLeft:Alignment.topRight,
+              angle: i == 0 ? -pi / 4: pi / 4,
+            child:Container(
+            width: lineThickness,
+            height: lineWidth * sqrt(2),
+              color: Colors.black.withOpacity(0.3),
+              margin: EdgeInsets.only(left: i == 0 ?0.0 : lineWidth - lineThickness),
+          ))
+        );
         gameStatus = GameStatus.settlement;
       }
     }
