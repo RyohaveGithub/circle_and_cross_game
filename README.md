@@ -1,6 +1,8 @@
 # circle_and_cross_game
 
-A new Flutter project.
+Futterで作成マルバツゲームです。
+
+Udemyの動画を元に完成させました。
 
 ## Getting Started
 
@@ -14,4 +16,4 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter, view our
 [online documentation](https://flutter.dev/docs), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
-# circle_and_cross_game
+
