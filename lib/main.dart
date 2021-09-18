@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import "package:font_awesome_flutter/font_awesome_flutter.dart";
+import 'package:helloworld/model.dart';
 
 void main() {
   runApp(const MyApp());
@@ -29,13 +30,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
+  bool turnOfCircle = true;
+  List<PieceStatus> statusList=List.filled(9,PieceStatus.none);
 
   @override
   Widget build(BuildContext context) {
@@ -50,31 +46,67 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-      body:buildField(),
+      body:Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children:  [
+                    turnOfCircle? Icon(FontAwesomeIcons.circle):Icon(Icons.clear),
+                    Text("の番です"),
+                  ],
+                ),
+                OutlineButton(
+                  child:Text("クリア"),
+                  onPressed: () {
+
+                  },
+                )
+              ],
+            ),
+          ),
+          buildField()
+        ],
+      ),
 
     );
   }
 
   Column buildField() {
-    List<Widget> _columnCildren = [];
+    List<Widget> _columnCildren = [Divider(height: 0.0,color: Colors.black,)];
     List<Widget> _rowCildren = [];
 
-    for(int h=0; h<3; h++){
+    for(int j=0; j<3; j++){
       for(int i = 0; i < 3; i++){
+        int _index = j * 3 + i;
         _rowCildren.add(
             Expanded(
-              child:AspectRatio(
-                  aspectRatio: 1.0,
-                  child: i==2 ?Container()
-                      :Row(
-                    children: [
-                      Expanded(
-                        child: Container(
+              child:InkWell(
+                onTap:(){
+                  if(statusList[_index] == PieceStatus.none) {
+                    statusList[_index] = turnOfCircle ? PieceStatus.circle : PieceStatus.cross;
+                    turnOfCircle = !turnOfCircle;
+                  }
+                  setState(() {
+
+                  });
+              },
+                child: AspectRatio(
+                    aspectRatio: 1.0,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: buildContainer(statusList[_index]),
                         ),
-                      ),
-                      VerticalDivider(width:0.0,color:Colors.black),
-                    ],
-                  )),
+                        (i ==2)?Container():VerticalDivider(width:0.0,color:Colors.black),
+          ],
+                    )
+
+                    ),
+              ),
             )
         );
       }
@@ -84,6 +116,27 @@ class _MyHomePageState extends State<MyHomePage> {
     }
 
     return Column(children: _columnCildren,);
+  }
+
+  Container buildContainer(PieceStatus pierceStatus) {
+    switch(pierceStatus){
+      case PieceStatus.none:
+        return Container();
+        break;
+      case PieceStatus.circle:
+          return Container(
+            child:Icon(FontAwesomeIcons.circle,size:60,color:Colors.blue),
+          );
+          break;
+      case PieceStatus.cross:
+        return Container(
+          child:Icon(Icons.clear,size:60,color:Colors.red),
+        );
+        break;
+      default:
+        return Container();
+    }
+
   }
 }
 
