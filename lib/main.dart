@@ -32,6 +32,25 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   bool turnOfCircle = true;
   List<PieceStatus> statusList=List.filled(9,PieceStatus.none);
+  GameStatus gameStatus = GameStatus.play;
+
+  final List<List<int>> settlementListHorizonal =[
+    [0,1,2],
+    [3,4,5],
+    [6,7,8]
+  ];
+
+  final List<List<int>> settlementListVertical =[
+    [0,3,6],
+    [1,4,7],
+    [2,5,8]
+  ];
+
+  final List<List<int>> settlementListDiagonal =[
+    [0,4,8],
+    [3,4,6]
+  ];
+
 
   @override
   Widget build(BuildContext context) {
@@ -53,16 +72,15 @@ class _MyHomePageState extends State<MyHomePage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
-                  children:  [
-                    turnOfCircle? Icon(FontAwesomeIcons.circle):Icon(Icons.clear),
-                    Text("の番です"),
-                  ],
-                ),
+                buildText(),
                 OutlineButton(
                   child:Text("クリア"),
                   onPressed: () {
-
+                    setState(() {
+                      turnOfCircle = true;
+                      statusList = List.filled(9,PieceStatus.none);
+                      gameStatus = GameStatus.play;
+                    });
                   },
                 )
               ],
@@ -75,6 +93,33 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  Widget buildText() {
+    switch(gameStatus){
+      case GameStatus.play:
+        return Row(
+          children:  [
+            turnOfCircle? Icon(FontAwesomeIcons.circle):Icon(Icons.clear),
+            Text("の番です"),
+          ],
+        );
+        break;
+        case GameStatus.draw:
+          return Text("引き分けです");
+          break;
+      case GameStatus.settlement:
+        return Row(
+          children:  [
+            !turnOfCircle? Icon(FontAwesomeIcons.circle):Icon(Icons.clear),
+            Text("の勝ちです"),
+          ],
+        );
+        break;
+        default:
+          return Container();
+    }
+
+  }
+
   Column buildField() {
     List<Widget> _columnCildren = [Divider(height: 0.0,color: Colors.black,)];
     List<Widget> _rowCildren = [];
@@ -85,15 +130,16 @@ class _MyHomePageState extends State<MyHomePage> {
         _rowCildren.add(
             Expanded(
               child:InkWell(
-                onTap:(){
+                onTap:gameStatus == GameStatus.play ? (){
                   if(statusList[_index] == PieceStatus.none) {
                     statusList[_index] = turnOfCircle ? PieceStatus.circle : PieceStatus.cross;
                     turnOfCircle = !turnOfCircle;
+                    confirmResult();
                   }
                   setState(() {
 
                   });
-              },
+              } :null ,
                 child: AspectRatio(
                     aspectRatio: 1.0,
                     child: Row(
@@ -137,6 +183,27 @@ class _MyHomePageState extends State<MyHomePage> {
         return Container();
     }
 
+  }
+
+  void confirmResult(){
+    if(!statusList.contains(PieceStatus.none)){
+      gameStatus = GameStatus.draw;
+    }
+    for(int i =0; i < settlementListHorizonal.length; i++){
+      if(statusList[settlementListHorizonal[i][0]]== statusList[settlementListHorizonal[i][1]] && statusList[settlementListHorizonal[i][1]] == statusList[settlementListHorizonal[i][2]]&& statusList[settlementListHorizonal[i][0]]!= PieceStatus.none){
+        gameStatus = GameStatus.settlement;
+      }
+    }
+    for(int i =0; i < settlementListVertical.length; i++){
+      if(statusList[settlementListVertical[i][0]]== statusList[settlementListVertical[i][1]] && statusList[settlementListVertical[i][1]] == statusList[settlementListVertical[i][2]]&& statusList[settlementListVertical[i][0]]!= PieceStatus.none){
+        gameStatus = GameStatus.settlement;
+      }
+    }
+    for(int i =0; i < settlementListDiagonal.length; i++){
+      if(statusList[settlementListDiagonal[i][0]]== statusList[settlementListDiagonal[i][1]] && statusList[settlementListDiagonal[i][1]] == statusList[settlementListDiagonal[i][2]]&& statusList[settlementListDiagonal[i][0]]!= PieceStatus.none){
+        gameStatus = GameStatus.settlement;
+      }
+    }
   }
 }
 
