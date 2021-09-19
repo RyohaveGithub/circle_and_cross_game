@@ -54,7 +54,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   final List<List<int>> settlementListDiagonal =[
     [0,4,8],
-    [3,4,6]
+    [2,4,6]
   ];
 
 
@@ -242,7 +242,7 @@ class _MyHomePageState extends State<MyHomePage> {
             width: lineThickness,
             height: lineWidth * sqrt(2),
               color: Colors.black.withOpacity(0.3),
-              margin: EdgeInsets.only(left: i == 0 ?0.0 : lineWidth - lineThickness),
+              margin: EdgeInsets.only(left: i == 0 ? 0.0 : lineWidth - lineThickness),
           ))
         );
         gameStatus = GameStatus.settlement;
