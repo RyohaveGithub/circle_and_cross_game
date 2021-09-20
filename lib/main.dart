@@ -217,6 +217,29 @@ class _MyHomePageState extends State<MyHomePage> {
           )
         );
         gameStatus = GameStatus.settlement;
+        // showDialog(
+        //   context: context,
+        //   barrierDismissible: false,
+        //   builder: (_) {
+        //     return AlertDialog(
+        //       title: Text("プレゼントです！！！"),
+        //       content: Image.network('https://flutter.github.io/assets-for-api-docs/assets/widgets/owl-2.jpg'),
+        //       actions: [
+        //         FlatButton(
+        //           child: Text("ありがとう"),
+        //           onPressed: () =>
+        //           setState(() {
+        //             turnOfCircle = true;
+        //             statusList = List.filled(9,PieceStatus.none);
+        //             gameStatus = GameStatus.play;
+        //             buildLine = [Container()];
+        //             Navigator.pop(context);
+        //            })
+        //         ),
+        //       ],
+        //     );
+        //   },
+        // );
       }
     }
     for(int i =0; i < settlementListVertical.length; i++){
@@ -230,6 +253,7 @@ class _MyHomePageState extends State<MyHomePage> {
             )
         );
         gameStatus = GameStatus.settlement;
+
       }
     }
     for(int i =0; i < settlementListDiagonal.length; i++){
