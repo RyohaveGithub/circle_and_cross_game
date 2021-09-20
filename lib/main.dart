@@ -217,29 +217,7 @@ class _MyHomePageState extends State<MyHomePage> {
           )
         );
         gameStatus = GameStatus.settlement;
-        // showDialog(
-        //   context: context,
-        //   barrierDismissible: false,
-        //   builder: (_) {
-        //     return AlertDialog(
-        //       title: Text("プレゼントです！！！"),
-        //       content: Image.network('https://flutter.github.io/assets-for-api-docs/assets/widgets/owl-2.jpg'),
-        //       actions: [
-        //         FlatButton(
-        //           child: Text("ありがとう"),
-        //           onPressed: () =>
-        //           setState(() {
-        //             turnOfCircle = true;
-        //             statusList = List.filled(9,PieceStatus.none);
-        //             gameStatus = GameStatus.play;
-        //             buildLine = [Container()];
-        //             Navigator.pop(context);
-        //            })
-        //         ),
-        //       ],
-        //     );
-        //   },
-        // );
+        _showDialog();
       }
     }
     for(int i =0; i < settlementListVertical.length; i++){
@@ -253,7 +231,7 @@ class _MyHomePageState extends State<MyHomePage> {
             )
         );
         gameStatus = GameStatus.settlement;
-
+        _showDialog();
       }
     }
     for(int i =0; i < settlementListDiagonal.length; i++){
@@ -270,8 +248,42 @@ class _MyHomePageState extends State<MyHomePage> {
           ))
         );
         gameStatus = GameStatus.settlement;
+        _showDialog();
       }
     }
   }
+
+  Future _showDialog() async {
+    var value = await showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: Text('あなたの勝ちよ！'),
+        content: Column(
+          children:  [
+            const Text('今夜は勝利のワインに酔いしれなさい！でも飲み過ぎは注意よ'),
+            Padding(
+              padding: const EdgeInsets.only(top:50.0),
+              child: Image.asset('images/wine2.png'),
+            ),
+          ],
+        ),
+        actions: <Widget>[
+          SimpleDialogOption(
+            child: Text('了解'),
+            onPressed: (){
+              setState(() {
+                turnOfCircle = true;
+                statusList = List.filled(9,PieceStatus.none);
+                gameStatus = GameStatus.play;
+                buildLine = [Container()];
+                Navigator.pop(context);
+              });
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
 }
 
