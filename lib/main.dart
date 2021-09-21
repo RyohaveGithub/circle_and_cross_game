@@ -253,36 +253,40 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  Future _showDialog() async {
-    var value = await showDialog(
-      context: context,
-      builder: (BuildContext context) => AlertDialog(
-        title: Text('あなたの勝ちよ！'),
-        content: Column(
-          children:  [
-            const Text('今夜は勝利のワインに酔いしれなさい！でも飲み過ぎは注意よ'),
-            Padding(
-              padding: const EdgeInsets.only(top:50.0),
-              child: Image.asset('images/wine2.png'),
+  void _showDialog() {
+    Future.delayed(Duration(milliseconds: 5), () async {
+      //処理が始まってミリ５秒後に出力される
+      var value = await showDialog(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          title: Text('あなたの勝ちよ！'),
+          content: Column(
+            children:  [
+              const Text('今夜は勝利のワインに酔いしれなさい！でも飲み過ぎは注意よ'),
+              Padding(
+                padding: const EdgeInsets.only(top:50.0),
+                child: Image.asset('images/wine2.png'),
+              ),
+            ],
+          ),
+          actions: <Widget>[
+            SimpleDialogOption(
+              child: Text('了解'),
+              onPressed: (){
+                setState(() {
+                  turnOfCircle = true;
+                  statusList = List.filled(9,PieceStatus.none);
+                  gameStatus = GameStatus.play;
+                  buildLine = [Container()];
+                  Navigator.pop(context);
+                });
+              },
             ),
           ],
         ),
-        actions: <Widget>[
-          SimpleDialogOption(
-            child: Text('了解'),
-            onPressed: (){
-              setState(() {
-                turnOfCircle = true;
-                statusList = List.filled(9,PieceStatus.none);
-                gameStatus = GameStatus.play;
-                buildLine = [Container()];
-                Navigator.pop(context);
-              });
-            },
-          ),
-        ],
-      ),
-    );
+      );
+    });
+
   }
 
 }
